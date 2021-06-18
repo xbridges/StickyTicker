@@ -13,6 +13,7 @@ type StickyTicker struct {
 	delay time.Duration
 	c chan []uint
 	mtx sync.Mutex
+	cancel func()
 }
 
 /*
@@ -21,21 +22,22 @@ type StickyTicker struct {
  Requires:
  	interval: set interval time to execute a callback.  
  	delay: set delay to execute a callback if need. 
- 	ctx: it needs context object to create StickyTicker.
  	callback: your customize function. 
 */
-
-func NewStickyTicker( interval uint, delay uint, ctx context.Context, callback func(time.Time) ) *StickyTicker {
+func NewStickyTicker( interval uint, delay uint, callback func(time.Time) ) *StickyTicker {
 
 	di := time.Duration(interval) * time.Second
 	do := time.Duration(delay) * time.Second
 	adjt, _ := GetNextTrigger(di, do)
+	ctx, cancel := context.WithCancel(context.Background())
+
 	s := &StickyTicker{
 		Timer: time.NewTimer(adjt),
 		interval: di,
 		delay: do,
 		c: make(chan []uint),
 		mtx: sync.Mutex{},
+		cancel: cancel, 
 	}
 	
 	stop := func() {
@@ -81,8 +83,8 @@ func NewStickyTicker( interval uint, delay uint, ctx context.Context, callback f
  Stop: This method be able to stop StickyTicker.
  info) StickyTicker has not re-start after stoped.
 */
-func(s *StickyTicker) Stop( cancel func() ){
-	cancel()
+func(s *StickyTicker) Stop(){
+	s.cancel()
 }
 
 /*

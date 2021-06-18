@@ -4,13 +4,13 @@
 
 ## usage
   ```
-  	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(context.Background())
 	fmt.Println("start", time.Now())
 	
-	s := NewStickyTicker(5, 0, ctx, func(t time.Time){
+	s := NewStickyTicker(5, 0, func(t time.Time){
 		fmt.Println(t)
 	})
-	defer s.Stop(cancel)
+	defer s.Stop()
 
 	time.Sleep(15 * time.Second)
 	fmt.Println("change interval", time.Now())

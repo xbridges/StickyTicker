@@ -4,7 +4,6 @@ import(
 	"testing"
 	"fmt"
 	"time"
-	"context"
 )
 
 func TestStickyTickTimes( t *testing.T ){
@@ -26,12 +25,11 @@ func TestStickyTickTimes( t *testing.T ){
 
 func TestStickyticker( t *testing.T ){
 
-	ctx, cancel := context.WithCancel(context.Background())
 	fmt.Println("start TestStickyticker", time.Now())
-	s := NewStickyTicker(5, 0, ctx, func(t time.Time){
+	s := NewStickyTicker(5, 0, func(t time.Time){
 		fmt.Println(t)
 	}) // tickerと同じく、作ったら即実行
-	defer s.Stop(cancel)
+	defer s.Stop()
 
 	time.Sleep(15 * time.Second)
 	s.Reset(3,0)
