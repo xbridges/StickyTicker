@@ -33,6 +33,7 @@ func TestStickyticker( t *testing.T ){
 
 	time.Sleep(15 * time.Second)
 	s.Reset(3,0)
+	fmt.Println("changed interval. 5->3")
 	time.Sleep(15 * time.Second)
 	fmt.Println(s)
 }
