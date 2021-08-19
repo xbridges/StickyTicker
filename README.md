@@ -15,6 +15,7 @@
 	time.Sleep(15 * time.Second)
 	fmt.Println("change interval", time.Now())
 	s.Reset(3,0)
+	fmt.Println("changed interval. 5->3")
 	time.Sleep(15 * time.Second)
 	fmt.Println(s)
 
